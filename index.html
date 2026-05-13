@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Derecho Mercantil I — Prácticas 2025-2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#4B3FA8;--pl:#EEEDFE;--pm:#7B72D4;--p2:#3A3090;
+  --g:#1A6B44;--gb:#EDFAF4;--gc:#5AB886;
+  --r:#9B2020;--rb:#FEF0F0;--rc:#E07878;
+  --a:#7A4A00;--ab:#FFF8EC;
+  --t:#1A1A2E;--ts:#5A5A7A;--tf:#9090AA;
+  --bg:#F4F3EF;--card:#FFFFFF;--brd:#E2E0DA;--brd2:#C8C6BE;
+  --sh:0 2px 18px rgba(75,63,168,.09),0 1px 4px rgba(0,0,0,.05);
+  --rad:12px;--rad2:8px
+}
+body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;padding:0}
+
+/* PANTALLA INICIO */
+.inicio{max-width:720px;margin:0 auto;padding:3rem 1.5rem 4rem;text-align:center}
+.logo{display:inline-flex;align-items:center;gap:8px;background:var(--pl);color:var(--p);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 16px;border-radius:99px;margin-bottom:1.5rem}
+.inicio h1{font-family:'Lora',serif;font-size:clamp(1.7rem,4vw,2.4rem);font-weight:600;line-height:1.2;margin-bottom:.75rem;color:var(--t)}
+.inicio p{font-size:15.5px;color:var(--ts);line-height:1.7;max-width:540px;margin:0 auto 2.5rem}
+.bloques-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:2rem;text-align:left}
+.bloque-card{background:var(--card);border:1.5px solid var(--brd);border-radius:var(--rad);padding:14px 16px;cursor:pointer;transition:border-color .15s,background .15s,transform .1s;position:relative}
+.bloque-card:hover{border-color:var(--pm);background:var(--pl);transform:translateY(-2px)}
+.bloque-card.activo{border-color:var(--p);background:var(--pl)}
+.bloque-card.activo::after{content:'✓';position:absolute;top:10px;right:12px;font-size:13px;color:var(--p);font-weight:700}
+.bloque-num{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--pm);margin-bottom:4px}
+.bloque-titulo{font-size:13.5px;font-weight:600;color:var(--t);line-height:1.35}
+.bloque-count{font-size:12px;color:var(--tf);margin-top:3px}
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-primario{background:var(--p);color:#fff;border:none;border-radius:var(--rad2);padding:13px 32px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s,transform .1s}
+.btn-primario:hover{background:var(--p2);transform:translateY(-1px)}
+.btn-secundario{background:var(--card);color:var(--t);border:1.5px solid var(--brd2);border-radius:var(--rad2);padding:13px 24px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer;transition:background .15s}
+.btn-secundario:hover{background:var(--bg)}
+.sel-info{font-size:13px;color:var(--ts);margin-bottom:1.25rem}
+.sel-info strong{color:var(--p);font-weight:600}
+
+/* PANTALLA QUIZ */
+.quiz-wrap{display:none;max-width:720px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;gap:10px}
+.top-bar button{background:none;border:1px solid var(--brd2);border-radius:99px;font-size:12px;padding:5px 14px;cursor:pointer;color:var(--ts);font-family:inherit}
+.top-bar button:hover{background:var(--bg);color:var(--t)}
+.prog-outer{flex:1}
+.prog-label-row{display:flex;justify-content:space-between;margin-bottom:5px}
+.prog-label{font-size:12px;color:var(--tf);font-weight:500}
+.prog-track{background:#E8E6F0;border-radius:99px;height:5px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,var(--pm),var(--p));height:5px;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.card{background:var(--card);border-radius:var(--rad);box-shadow:var(--sh);border:1px solid var(--brd);padding:1.75rem 1.75rem 1.5rem;margin-bottom:1rem}
+.meta-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;letter-spacing:.04em;padding:4px 10px;border-radius:99px;border:1px solid}
+.chip-tema{background:var(--pl);color:var(--p);border-color:#C8C4F0}
+.chip-art{background:var(--ab);color:var(--a);border-color:#F0D9A0}
+.chip-lec{background:#F0F4FF;color:#3A3A8C;border-color:#C8CCEE}
+.pnum{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tf);margin-bottom:8px}
+.enunciado{background:var(--pl);border-left:3px solid var(--p);border-radius:0 var(--rad2) var(--rad2) 0;padding:1.1rem 1.25rem;font-size:15px;line-height:1.75;color:var(--t);margin-bottom:1.5rem}
+.opciones{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem}
+.opcion-btn{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1.5px solid var(--brd);border-radius:var(--rad2);padding:12px 16px;cursor:pointer;font-size:14px;line-height:1.55;color:var(--t);text-align:left;transition:border-color .15s,background .15s,transform .1s;font-family:inherit;width:100%}
+.opcion-btn:hover:not(:disabled){border-color:var(--pm);background:var(--pl);transform:translateY(-1px)}
+.opcion-btn:disabled{cursor:default}
+.letra{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:#EEEDF8;color:var(--p);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:1px;transition:background .15s,color .15s}
+.opcion-btn.ok{background:var(--gb);border-color:var(--gc);color:var(--g)}
+.opcion-btn.ok .letra{background:var(--gc);color:#fff}
+.opcion-btn.ko{background:var(--rb);border-color:var(--rc);color:var(--r)}
+.opcion-btn.ko .letra{background:var(--rc);color:#fff}
+.opcion-btn.dim{opacity:.4}
+.feedback{border-radius:var(--rad2);padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:14px;line-height:1.65;display:none;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.feedback.show{display:block}
+.feedback.ok{background:var(--gb);border:1px solid var(--gc);color:#1A5C3A}
+.feedback.ko{background:var(--rb);border:1px solid var(--rc);color:#822020}
+.fb-titulo{font-weight:600;margin-bottom:5px;display:flex;align-items:center;gap:6px;font-size:14px}
+.nav-row{display:flex;justify-content:space-between;align-items:center}
+.score-txt{font-size:13px;color:var(--tf);font-weight:500}
+.btn-sig{background:var(--p);color:#fff;border:none;border-radius:var(--rad2);padding:11px 28px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;display:none;transition:background .15s,transform .1s}
+.btn-sig:hover{background:var(--p2);transform:translateY(-1px)}
+.btn-sig.vis{display:inline-block}
+
+/* RESULTADOS */
+.resultado-wrap{display:none;max-width:720px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.res-card{background:var(--card);border-radius:var(--rad);box-shadow:var(--sh);border:1px solid var(--brd);padding:2rem}
+.res-header{text-align:center;padding-bottom:1.75rem;border-bottom:1px solid var(--brd);margin-bottom:1.75rem}
+.res-big{font-family:'Lora',serif;font-size:60px;font-weight:600;color:var(--p);line-height:1}
+.res-pct{font-size:15px;color:var(--ts);margin:6px 0 12px}
+.res-msg{font-size:14.5px;line-height:1.7;color:var(--ts);max-width:480px;margin:0 auto}
+.res-tit{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tf);margin-bottom:10px}
+.res-lista{display:flex;flex-direction:column;gap:7px;margin-bottom:2rem}
+.res-item{display:flex;align-items:flex-start;gap:10px;padding:9px 13px;border-radius:var(--rad2);background:var(--bg);border-left:3px solid;font-size:13px}
+.res-item.ok{border-color:var(--gc)}
+.res-item.ko{border-color:var(--rc)}
+.res-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.res-txt{color:var(--ts);line-height:1.5}
+.res-txt strong{color:var(--t);font-weight:600}
+.res-botones{display:flex;gap:10px;flex-wrap:wrap}
+.btn-full{flex:1;min-width:140px;background:var(--p);color:#fff;border:none;border-radius:var(--rad2);padding:13px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s}
+.btn-full:hover{background:var(--p2)}
+.btn-full.sec{background:var(--card);color:var(--t);border:1.5px solid var(--brd2)}
+.btn-full.sec:hover{background:var(--bg)}
+
+/* Barra de bloques temáticos coloreada en resultados */
+.bloques-resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:1.75rem}
+.bloque-res{background:var(--bg);border-radius:var(--rad2);padding:10px 12px;text-align:center}
+.bloque-res-nombre{font-size:11px;font-weight:600;color:var(--ts);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.bloque-res-score{font-size:20px;font-weight:600;font-family:'Lora',serif}
+.bloque-res-score.malo{color:var(--r)}
+.bloque-res-score.medio{color:var(--a)}
+.bloque-res-score.bien{color:var(--g)}
+
+@media(max-width:580px){.card{padding:1.25rem}.inicio{padding:2rem 1rem 3rem}.res-card{padding:1.25rem}}
+</style>
+</head>
+<body>
+
+<!-- ===== PANTALLA INICIO ===== -->
+<div class="inicio" id="inicio">
+  <div class="logo">⚖️ Derecho Mercantil I · 2025-2026</div>
+  <h1>Test de práctica<br><em style="font-style:italic;color:var(--pm)">Casos prácticos</em></h1>
+  <p>35 preguntas basadas en los casos prácticos y lecciones del segundo cuatrimestre. Selecciona los bloques temáticos que quieras practicar o haz el test completo.</p>
+
+  <div class="bloques-grid" id="bloques-grid"></div>
+  <p class="sel-info" id="sel-info"></p>
+
+  <div class="btn-row">
+    <button class="btn-secundario" onclick="seleccionarTodos()">Seleccionar todos</button>
+    <button class="btn-primario" onclick="iniciarTest(false)">Empezar en orden →</button>
+    <button class="btn-primario" style="background:var(--pm)" onclick="iniciarTest(true)">🔀 Aleatorio</button>
+  </div>
+</div>
+
+<!-- ===== PANTALLA QUIZ ===== -->
+<div class="quiz-wrap" id="quiz-wrap">
+  <div class="top-bar">
+    <button onclick="volverInicio()">← Inicio</button>
+    <div class="prog-outer">
+      <div class="prog-label-row">
+        <span class="prog-label" id="prog-label">Pregunta 1 de 35</span>
+        <span class="prog-label" id="prog-pct">0%</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="meta-row" id="meta-row"></div>
+    <p class="pnum" id="pnum"></p>
+    <div class="enunciado" id="enunciado"></div>
+    <div class="opciones" id="opciones"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-row">
+      <span class="score-txt" id="score-txt">Aciertos: 0 / 0</span>
+      <button class="btn-sig" id="btn-sig">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PANTALLA RESULTADOS ===== -->
+<div class="resultado-wrap" id="resultado-wrap">
+  <div class="res-card">
+    <div class="res-header">
+      <div class="res-big" id="res-big"></div>
+      <div class="res-pct" id="res-pct"></div>
+      <p class="res-msg" id="res-msg"></p>
+    </div>
+    <p class="res-tit">Resultado por bloque</p>
+    <div class="bloques-resumen" id="bloques-resumen"></div>
+    <p class="res-tit">Pregunta a pregunta</p>
+    <div class="res-lista" id="res-lista"></div>
+    <div class="res-botones">
+      <button class="btn-full sec" onclick="volverInicio()">← Cambiar bloques</button>
+      <button class="btn-full" onclick="repetirTest()">↺ Repetir mismo test</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =================== BANCO DE PREGUNTAS =================== */
+const PREGUNTAS = [
+  /* ---- BLOQUE 0: Teoría general y sociedades personalistas ---- */
+  {
+    bloque:0,
+    lec:"Lec. 14-15",art:"Art. 127 Ccom",tema:"Responsabilidad en soc. colectiva",
+    enunciado:"Los tres socios de una sociedad colectiva contraen una deuda frente a un proveedor. El proveedor reclama el total de la deuda solo a uno de los socios. ¿Cómo es la responsabilidad de los socios en la sociedad colectiva?",
+    opciones:["Limitada a la aportación de cada socio al capital social.","Ilimitada, subsidiaria respecto al patrimonio social y solidaria entre los socios (art. 127 Ccom).","Ilimitada pero mancomunada: el proveedor solo puede reclamar a cada socio su parte proporcional.","Limitada al valor nominal de sus participaciones, como en la SRL."],
+    correcta:1,
+    explicacion:"Conforme al art. 127 Ccom, los socios colectivos responden de las deudas sociales de forma ilimitada (con todo su patrimonio personal), subsidiaria (primero debe ejecutarse el patrimonio social: beneficio de excusión, art. 237 Ccom) y solidaria entre ellos (el acreedor puede exigir el total a cualquiera de los socios)."
+  },
+  {
+    bloque:0,
+    lec:"Lec. 15",art:"Art. 148 Ccom",tema:"Socio comanditario: injerencia",
+    enunciado:"D. Lucas es socio comanditario de LOGÍSTICA EN COMANDITA SC. Harto de la gestión de los socios colectivos, decide firmar un contrato con un proveedor actuando como 'apoderado especial' de la sociedad. ¿Qué consecuencias tiene esta actuación?",
+    opciones:["Ninguna: el comanditario puede actuar como apoderado especial sin perder su responsabilidad limitada.","El art. 148 Ccom prohíbe al socio comanditario realizar actos de administración, incluso como apoderado; si vulnera la prohibición pierde su limitación de responsabilidad y responde como socio colectivo.","Puede actuar como apoderado especial pero no como apoderado general.","Su responsabilidad se limita a los fondos comprometidos solo en ese contrato concreto."],
+    correcta:1,
+    explicacion:"El art. 148 Ccom establece que los socios comanditarios no podrán hacer acto alguno de administración de la sociedad, ni aun en calidad de apoderado general o especial. Si infringen esta prohibición, pierden el escudo de responsabilidad limitada y quedan expuestos como socios colectivos frente a los acreedores."
+  },
+  {
+    bloque:0,
+    lec:"Lec. 15",art:"Art. 147 Ccom",tema:"Razón social y responsabilidad comanditario",
+    enunciado:"D. Marcos, socio comanditario de una sociedad, consintió expresamente que su nombre figurara en la razón social 'Fernández, Marcos y Compañía, Sociedad en Comandita'. Un acreedor reclama a Marcos el total de las deudas de la sociedad. ¿Puede hacerlo?",
+    opciones:["No, Marcos siempre conserva su responsabilidad limitada independientemente de la razón social.","Sí, el art. 147 Ccom establece que el comanditario que consiente que su nombre figure en la razón social responde como socio colectivo frente a terceros.","Solo si Marcos firmó personalmente el contrato que genera la deuda.","Sí, pero solo por el importe de su aportación más un 20% de recargo."],
+    correcta:1,
+    explicacion:"El art. 147 Ccom sanciona al comanditario que consiente la inclusión de su nombre en la razón social con la responsabilidad propia del socio colectivo frente a terceros. La razón social da publicidad de hecho y genera confianza; por ello la ley equipara su posición a la del colectivo."
+  },
+  /* ---- BLOQUE 1: Fundación y capital ---- */
+  {
+    bloque:1,
+    lec:"Lec. 17",art:"Arts. 36-38 LSC",tema:"Sociedad en formación",
+    enunciado:"Antes de inscribirse en el Registro Mercantil, los fundadores de TECNOGAR SA celebran un contrato de arrendamiento de oficinas necesario para iniciar las operaciones sociales. La sociedad no llega a inscribirse. ¿Quién responde de ese contrato?",
+    opciones:["Solo la futura sociedad, que asumirá automáticamente todos los actos previos a su inscripción.","Responde la sociedad en formación (arts. 36-38 LSC). Por los actos indispensables para la inscripción responde la sociedad en formación; los fundadores responden personalmente de los actos no indispensables. Si la sociedad no llega a inscribirse, responden solidariamente los socios y administradores.","Solo los socios fundadores que firmaron el contrato, con carácter ilimitado.","Nadie, porque el contrato es nulo al haber sido celebrado por una sociedad inexistente."],
+    correcta:1,
+    explicacion:"Los arts. 36-38 LSC regulan el régimen de la sociedad en formación. Los actos y contratos indispensables para la inscripción los asume la propia sociedad en formación. Si la sociedad no llega a inscribirse, responden solidariamente de esos contratos los socios, administradores y cualquier persona que los hubiese celebrado en nombre de la sociedad (art. 38 LSC)."
+  },
+  {
+    bloque:1,
+    lec:"Lec. 17",art:"Arts. 39-40 LSC",tema:"Sociedad irregular",
+    enunciado:"Dos socios constituyen una SRL mediante escritura pública en enero pero no la inscriben en el RM. En octubre del mismo año siguen operando como sociedad. ¿Cuál es su situación jurídica?",
+    opciones:["Son una sociedad en formación hasta que decidan inscribirse, sin plazo límite.","Transcurrido un año desde el otorgamiento de la escritura sin inscripción, y si existe voluntad de no inscribir, la sociedad se considera irregular y se aplican las normas de la sociedad colectiva o civil (arts. 39-40 LSC), con responsabilidad personal e ilimitada de los socios.","Son una sociedad nula de pleno derecho desde el primer día de actividad sin inscripción.","Siguen siendo una SRL válida porque la inscripción no es constitutiva para las SRL."],
+    correcta:1,
+    explicacion:"Los arts. 39-40 LSC regulan la sociedad irregular. Si transcurre un año desde el otorgamiento de escritura sin inscripción y se deduce la intención de no inscribir, la sociedad pasa a ser irregular. En ese caso se aplica el régimen de sociedad colectiva (o civil), los socios responden personal e ilimitadamente, y cualquiera de ellos puede pedir la disolución."
+  },
+  {
+    bloque:1,
+    lec:"Lec. 17",art:"Arts. 63-72 LSC",tema:"Aportaciones no dinerarias en SA",
+    enunciado:"En la fundación de una SA, uno de los socios aporta un inmueble valorado por él mismo en 200.000 €. No se solicita informe de experto independiente. ¿Es válida esta aportación?",
+    opciones:["Sí, en la SA el socio puede valorar libremente sus aportaciones no dinerarias.","No, el art. 67 LSC exige que en la SA las aportaciones no dinerarias sean objeto de un informe elaborado por uno o varios expertos independientes designados por el registrador mercantil, para garantizar que la valoración coincide con el valor real.","Sí, el informe de experto solo es obligatorio si la aportación supera los 300.000 €.","No, en la SA solo se admiten aportaciones dinerarias en la fundación."],
+    correcta:1,
+    explicacion:"El art. 67 LSC exige en la SA (no en la SRL) que las aportaciones no dinerarias vayan acompañadas de un informe elaborado por expertos independientes designados por el registrador mercantil. El objeto es evitar la sobrevaluación y proteger a los acreedores y futuros accionistas. En la SRL el control es diferente (responsabilidad de fundadores, socios y administradores, art. 73 LSC)."
+  },
+  /* ---- BLOQUE 2: Acciones, participaciones y derechos del socio ---- */
+  {
+    bloque:2,
+    lec:"Lec. 18",art:"Art. 93 y 99 LSC",tema:"Acciones sin voto",
+    enunciado:"INVERSIONES BV SA emite acciones sin voto y no distribuye el dividendo mínimo preferente pactado en dos ejercicios consecutivos. ¿Qué consecuencia tiene esto para los titulares de acciones sin voto?",
+    opciones:["Ninguna: las acciones sin voto nunca atribuyen el derecho de voto en ningún caso.","Los titulares de acciones sin voto adquieren el derecho de voto hasta que se restituya el dividendo mínimo no percibido (art. 99 LSC), y el dividendo mínimo devengado es acumulativo.","Las acciones sin voto se convierten automáticamente en acciones ordinarias de forma definitiva.","La sociedad incurre en causa de disolución automática."],
+    correcta:1,
+    explicacion:"El art. 99 LSC establece que si no se paga el dividendo mínimo preferente a los titulares de acciones sin voto, estos adquieren el derecho de voto hasta que la sociedad haga efectivo el pago del dividendo mínimo no percibido. El dividendo no percibido es acumulativo y debe satisfacerse antes de distribuir dividendos a las acciones ordinarias."
+  },
+  {
+    bloque:2,
+    lec:"Lec. 18",art:"Art. 348 bis LSC",tema:"Derecho de separación por falta de dividendo",
+    enunciado:"Un socio de una SRL lleva cinco años sin recibir dividendos pese a que la sociedad ha obtenido beneficios todos los ejercicios. El socio quiere abandonar la sociedad. ¿Tiene algún derecho legal que le ampare?",
+    opciones:["No, la distribución de dividendos es una decisión discrecional de la junta y el socio no puede exigirla.","Sí, el art. 348 bis LSC reconoce el derecho de separación al socio que vote a favor de la distribución de dividendos cuando la junta no acuerda distribuir al menos un tercio de los beneficios propios de la explotación del objeto social obtenidos durante el ejercicio anterior, siempre que hayan transcurrido cinco años desde la inscripción de la sociedad.","Sí, pero solo si tiene más del 5% del capital social.","No, el derecho de separación por falta de dividendo está suspendido indefinidamente por la legislación actual."],
+    correcta:1,
+    explicacion:"El art. 348 bis LSC (introducido para proteger a socios minoritarios) reconoce el derecho de separación al socio que vote a favor de la distribución y la junta no acuerde distribuir al menos 1/3 de los beneficios propios de la explotación del objeto social, siempre que hayan transcurrido cinco años desde la inscripción de la sociedad y se cumplan los demás requisitos legales."
+  },
+  {
+    bloque:2,
+    lec:"Lec. 18",art:"Art. 90 LSC",tema:"Principio de indivisibilidad",
+    enunciado:"Un accionista de una SA quiere dividir una de sus acciones en dos para transmitir la mitad a su hijo. Los estatutos no dicen nada al respecto. ¿Es posible esta operación?",
+    opciones:["Sí, el accionista puede dividir libremente sus acciones en cualquier número de fracciones.","No, las acciones y participaciones son indivisibles (art. 90 LSC). Si la acción corresponde a varios copropietarios, deberán designar a una persona para ejercer los derechos de socio, sin perjuicio de que respondan solidariamente frente a la sociedad.","Sí, pero solo si los estatutos lo autorizan expresamente.","Sí, la sociedad puede emitir fracciones de acciones si así lo acuerda la junta."],
+    correcta:1,
+    explicacion:"El art. 90 LSC establece el principio de indivisibilidad de las acciones y participaciones: son partes alícuotas, indivisibles y acumulables del capital social. No se pueden fraccionar. Si una acción pertenece en copropiedad a varias personas, deben designar un representante común para el ejercicio de los derechos de socio (art. 126 LSC)."
+  },
+  /* ---- BLOQUE 3: Junta General ---- */
+  {
+    bloque:3,
+    lec:"Lec. 19",art:"Art. 177 LSC",tema:"Intervalo entre convocatorias",
+    enunciado:"La junta general ordinaria de SUMINISTROS DE NUEVAS TECNOLOGÍAS SA fijó la primera convocatoria a las 12:00 h y la segunda ese mismo día a las 18:00 h. Los estatutos no dicen nada al respecto. ¿Qué irregularidad presenta este intervalo?",
+    opciones:["Ninguna: el intervalo de 6 horas entre convocatorias es suficiente.","El art. 177 LSC exige que entre la primera y la segunda convocatoria de las SA transcurra al menos 24 horas, por lo que un intervalo de 6 horas es insuficiente.","El intervalo es correcto en las SA, pero sería irregular en las SRL.","La ley solo exige que ambas convocatorias sean el mismo día, sin establecer intervalo mínimo."],
+    correcta:1,
+    explicacion:"El art. 177 LSC fija un mínimo de 24 horas entre la primera y la segunda convocatoria en las SA. Un intervalo de 6 horas vulnera este requisito. En la SRL no se exige ese intervalo: basta con que la convocatoria prevea la posibilidad de segunda reunión."
+  },
+  {
+    bloque:3,
+    lec:"Lec. 19",art:"Art. 173 LSC",tema:"Publicidad de la convocatoria",
+    enunciado:"La convocatoria se publicó en el BORME y en 'El Granadino', semanario local. Los estatutos no prevén web corporativa. ¿Es válida?",
+    opciones:["Sí, el art. 173 LSC admite cualquier publicación periódica.","No, el art. 173 LSC exige que el segundo medio sea un diario —publicación diaria— de mayor circulación en la provincia, requisito que no cumple un semanario.","Sí, el semanario es válido si tiene más lectores que el BORME en la provincia.","Sí, porque la SA puede elegir libremente el medio de publicación."],
+    correcta:1,
+    explicacion:"El art. 173 LSC exige publicación en el BORME y en uno de los diarios de mayor circulación en la provincia. 'Diario' implica publicación diaria. Un semanario no cumple este requisito. Si la sociedad tuviera web corporativa inscrita, podría usarla en lugar del diario."
+  },
+  {
+    bloque:3,
+    lec:"Lec. 19",art:"Art. 172 LSC",tema:"Complemento de convocatoria",
+    enunciado:"D. Alberto (7% capital) solicitó el 17 de junio que se añadiera un punto al orden del día. El complemento se publicó el 2 de julio y la junta se celebró el 16 de julio. ¿Cumple el plazo legal?",
+    opciones:["Sí, el complemento puede publicarse hasta el mismo día de la junta.","No, el art. 172 LSC exige que el complemento se publique al menos 15 días antes de la junta; del 2 al 16 de julio solo median 14 días.","Sí, basta con 10 días de antelación para el complemento.","No es necesario publicar complemento si el solicitante tiene más del 5%."],
+    correcta:1,
+    explicacion:"El art. 172 LSC establece que el complemento de convocatoria debe publicarse al menos 15 días antes de la celebración de la junta. Del 2 al 16 de julio solo transcurren 14 días. La consecuencia de incumplir este plazo es la nulidad de los acuerdos adoptados sobre ese punto adicional."
+  },
+  {
+    bloque:3,
+    lec:"Lec. 19",art:"Arts. 193-194 LSC",tema:"Quórum ordinario vs. reforzado",
+    enunciado:"La junta se constituyó en primera convocatoria con el 30% del capital suscrito. El orden del día incluía aprobación de cuentas y ampliación de capital. Los estatutos no prevén quórum especial. ¿Es válida la constitución?",
+    opciones:["Sí, el 30% supera el quórum del 25% para todos los acuerdos.","No, para la ampliación de capital (art. 194 LSC) el quórum en primera convocatoria es del 50%; con el 30% solo caben los acuerdos ordinarios.","Sí, basta el 25% del capital en primera convocatoria para cualquier acuerdo en SA.","No, siempre se requiere el 50% para cualquier tipo de acuerdo en primera convocatoria."],
+    correcta:1,
+    explicacion:"El art. 193 LSC fija el quórum ordinario en el 25% (primera convocatoria). El art. 194 LSC eleva el quórum al 50% (primera convocatoria) para materias especiales como la modificación de estatutos o la ampliación de capital. Con el 30% la junta puede tomar acuerdos ordinarios pero no los reforzados."
+  },
+  {
+    bloque:3,
+    lec:"Lec. 19",art:"Arts. 160 y 253 LSC",tema:"Competencia en cuentas anuales",
+    enunciado:"El orden del día incluía 'Elaboración, examen y aprobación de las cuentas anuales'. ¿Es correcta la atribución de la 'elaboración' a la junta?",
+    opciones:["Sí, la junta general puede elaborar y aprobar las cuentas anuales.","No, la elaboración y formulación corresponde a los administradores (art. 253 LSC); la junta solo examina y aprueba (art. 160.1.7º LSC).","Sí, si los estatutos atribuyen esa competencia a la junta.","No, porque el auditor es quien elabora las cuentas anuales."],
+    correcta:1,
+    explicacion:"La formulación (elaboración) de las cuentas anuales corresponde exclusivamente a los administradores (art. 253 LSC). La junta general solo tiene competencia para examinar, aprobar y decidir sobre la aplicación del resultado (art. 160.1.7º LSC). Incluir la 'elaboración' en el orden del día de la junta es una confusión de competencias."
+  },
+  {
+    bloque:3,
+    lec:"Lec. 19",art:"Arts. 166-167 y 174 LSC",tema:"Legitimación del convocante",
+    enunciado:"La convocatoria fue firmada como 'El apoderado', sin indicar nombre ni cargo. ¿Qué problema plantea esta identificación?",
+    opciones:["Ninguno: cualquier apoderado puede convocar la junta sin identificarse.","El art. 174 LSC exige que el anuncio identifique el cargo del convocante. La competencia para convocar corresponde al órgano de administración (arts. 166-167 LSC); un apoderado genérico carece de esa facultad salvo apoderamiento específico.","Solo es irregular si la sociedad tiene página web corporativa.","Es válido porque la ley permite que cualquier empleado de confianza convoque la junta."],
+    correcta:1,
+    explicacion:"La competencia para convocar la junta general corresponde al órgano de administración (arts. 166 y 167 LSC). Un apoderado genérico no tiene esa facultad salvo que disponga de apoderamiento específico con ese alcance. Además, el art. 174 LSC exige que el anuncio identifique al convocante. La omisión constituye un defecto formal que puede viciar la convocatoria."
+  },
+  {
+    bloque:3,
+    lec:"Lec. 19",art:"Arts. 163 y 164 LSC",tema:"Junta ordinaria fuera de plazo",
+    enunciado:"Una SA celebra su junta ordinaria en septiembre, cuando el ejercicio coincide con el año natural. ¿Qué consecuencias tiene esto?",
+    opciones:["La junta es nula de pleno derecho y sus acuerdos no tienen validez.","La junta sigue siendo válida aunque celebrada fuera del plazo de los seis primeros meses, pero los administradores pueden incurrir en responsabilidad (art. 164 LSC). No se convierte en junta extraordinaria.","La junta se convierte automáticamente en junta extraordinaria.","No hay consecuencia alguna, el plazo de seis meses es meramente orientativo."],
+    correcta:1,
+    explicacion:"El art. 164 LSC establece que la junta ordinaria debe celebrarse dentro de los seis primeros meses del ejercicio. Si se celebra fuera de plazo, la junta y sus acuerdos siguen siendo válidos; sin embargo, los administradores que incumplieron el deber de convocarla en plazo pueden incurrir en responsabilidad. El retraso no transforma la junta en extraordinaria."
+  },
+  {
+    bloque:3,
+    lec:"Lec. 19",art:"Arts. 204-208 LSC",tema:"Impugnación — abuso de mayoría",
+    enunciado:"La mayoría aprueba un dividendo con condiciones que perjudican injustificadamente a los minoritarios sin que exista una necesidad razonable de la sociedad. ¿Es impugnable?",
+    opciones:["No, los acuerdos sobre dividendos no son impugnables.","Sí, por lesión del interés social en beneficio de la mayoría (abuso de mayoría), causa reconocida en el art. 204 LSC.","Solo si el acuerdo se adoptó con menos del 50% de los votos.","No, porque el reparto de dividendos es una decisión empresarial que los tribunales no pueden revisar."],
+    correcta:1,
+    explicacion:"El art. 204 LSC permite impugnar los acuerdos que lesionen el interés social en beneficio de uno o varios socios o de terceros. El abuso de mayoría concurre cuando el acuerdo no responde a una necesidad razonable de la sociedad, se adopta en interés propio de la mayoría y causa un detrimento injustificado a los socios minoritarios."
+  },
+  {
+    bloque:3,
+    lec:"Lec. 19",art:"Art. 168 LSC",tema:"Solicitud de convocatoria por minoría",
+    enunciado:"Varios socios de una SA que en conjunto representan el 4% del capital exigen al órgano de administración que convoque una junta extraordinaria. ¿Tienen derecho?",
+    opciones:["Sí, basta con el 3% del capital social para solicitar la convocatoria de junta extraordinaria en las SA.","No, el art. 168 LSC exige que los socios solicitantes representen al menos el 5% del capital social para poder requerir notarialmente la convocatoria de junta extraordinaria.","Sí, cualquier socio, independientemente de su porcentaje, puede solicitar la convocatoria.","No, la convocatoria de junta extraordinaria a solicitud de socios solo está prevista en las SRL, no en las SA."],
+    correcta:1,
+    explicacion:"El art. 168 LSC reconoce a los socios que representen al menos el 5% del capital social el derecho a exigir mediante requerimiento notarial la convocatoria de junta general extraordinaria, indicando los asuntos a tratar. Si los socios solo representan el 4%, no alcanzan el umbral mínimo legal y no tienen ese derecho."
+  },
+  /* ---- BLOQUE 4: Órgano de Administración ---- */
+  {
+    bloque:4,
+    lec:"Lec. 20",art:"Arts. 111 y 234 LSC",tema:"Inscripción registral del administrador",
+    enunciado:"Francisco fue nombrado administrador único de OFITEC SA en junta, aceptó el cargo, pero aún no se inscribió en el RM cuando vendió una nave a la sociedad. ¿Era válida su actuación?",
+    opciones:["No, el nombramiento solo produce efectos desde su inscripción en el RM.","Sí, el nombramiento surte efectos internos desde la aceptación (art. 111 LSC); la inscripción es necesaria para la plena oponibilidad frente a terceros, no para la validez interna.","Sí, pero solo para actos de gestión interna, no para representar a la sociedad ante terceros.","No, porque Isabel seguía siendo administradora hasta la inscripción del cambio."],
+    correcta:1,
+    explicacion:"El art. 111 LSC establece que el nombramiento de administrador es eficaz desde su aceptación. La inscripción registral es declarativa para la oponibilidad frente a terceros (art. 234 LSC), pero no constitutiva para la validez interna del nombramiento. Isabel había renunciado, por lo que Francisco era el administrador válido desde que aceptó el cargo."
+  },
+  {
+    bloque:4,
+    lec:"Lec. 20",art:"Arts. 217-218 LSC",tema:"Remuneración sin previsión estatutaria",
+    enunciado:"La junta de OFITEC SA acordó pagar 30.000 € anuales a Francisco como administrador único. Los estatutos guardan silencio sobre la remuneración. ¿Es válido el acuerdo?",
+    opciones:["Sí, la junta puede fijar libremente la remuneración aunque los estatutos no digan nada.","No, el art. 217 LSC exige que la remuneración esté prevista en los estatutos; si guardan silencio, el cargo es gratuito y el acuerdo requeriría previa modificación estatutaria para ser válido.","Sí, si el acuerdo se adopta por unanimidad de todos los socios.","No, porque 30.000 € supera el límite máximo legal para administradores de SA."],
+    correcta:1,
+    explicacion:"El art. 217 LSC establece que el cargo de administrador es gratuito salvo que los estatutos establezcan lo contrario. La remuneración debe estar prevista estatutariamente y determinada (o determinable) por la junta. Sin previsión estatutaria, el acuerdo de remunerar con 30.000 € es inválido; sería necesario modificar los estatutos previamente."
+  },
+  {
+    bloque:4,
+    lec:"Lec. 20",art:"Arts. 228-229 LSC",tema:"Deber de lealtad — conflicto de interés",
+    enunciado:"Francisco, administrador único y socio de OFITEC SA, votó a favor de que la sociedad le comprara a él mismo una nave, sin abstenerse. ¿Qué deber puede haber vulnerado?",
+    opciones:["Ninguno: el deber de lealtad solo aplica cuando el administrador vota en el consejo, no como socio.","El deber de lealtad y de evitar conflictos de interés (arts. 228 y 229 LSC). Como administrador con interés personal en la operación, debería haberse abstenido de votar; el acuerdo podría ser impugnable si el voto fue determinante.","Solo el deber de diligencia: debió aportar un informe técnico sobre el valor de mercado.","Ninguno, la dispensa fue aprobada por la junta con conocimiento del informe previo."],
+    correcta:1,
+    explicacion:"El art. 228 e) LSC obliga al administrador a abstenerse en situaciones de conflicto de interés. El art. 229 LSC prohíbe realizar transacciones con la sociedad sin dispensa. Aunque la junta otorgó la dispensa, Francisco como socio tenía el deber de abstenerse de votar en su propio beneficio (art. 190 LSC). El acuerdo puede ser impugnable si el voto fue determinante."
+  },
+  {
+    bloque:4,
+    lec:"Lec. 20",art:"Art. 213 LSC",tema:"Prohibiciones para ser administrador",
+    enunciado:"Los socios de OFINTEC SL plantean nombrar: (1) al administrador de una sociedad declarada en concurso de acreedores, y (2) a un ingeniero condenado por delito de calumnias. ¿Cuál puede ser administrador?",
+    opciones:["Ninguno de los dos.","El segundo (el ingeniero): el art. 213 LSC prohíbe a quien esté inhabilitado conforme a la Ley Concursal, pero el delito de calumnias no figura entre los que impiden el acceso al cargo.","Solo el primero; el segundo tiene prohibición absoluta.","Ambos, porque las prohibiciones del art. 213 LSC solo afectan a personas jurídicas."],
+    correcta:1,
+    explicacion:"El art. 213 LSC enumera las prohibiciones de acceso al cargo de administrador, entre ellas estar inhabilitado conforme a la Ley Concursal. El catálogo de delitos que generan prohibición incluye delitos contra la libertad, el patrimonio, el orden socioeconómico, etc., pero no el delito de calumnias. Por tanto, el ingeniero condenado por calumnias no está incurso en la prohibición."
+  },
+  {
+    bloque:4,
+    lec:"Lec. 20",art:"Arts. 210 y 233 LSC",tema:"Cuatro administradores mancomunados en SRL",
+    enunciado:"Los socios de OFINTEC SL quieren establecer en estatutos cuatro administradores mancomunados. ¿Es posible en una SRL?",
+    opciones:["No, tampoco en la SRL pueden nombrarse más de dos administradores mancomunados sin formar un consejo.","Sí, la LSC admite expresamente en la SRL más de dos administradores con facultades conjuntas sin necesidad de constituir consejo; los estatutos deben regular cómo se ejerce la representación mancomunada.","Solo si los cuatro son socios de la sociedad.","Sí, pero solo si el capital social supera los 60.000 euros."],
+    correcta:1,
+    explicacion:"El art. 210 LSC diferencia SA y SRL. En la SA, tres o más administradores conjuntos deben formar obligatoriamente consejo de administración. En la SRL, la ley admite expresamente más de dos administradores mancomunados sin necesidad de consejo. Los estatutos deben determinar cómo se ejerce la representación (art. 233.2 LSC)."
+  },
+  {
+    bloque:4,
+    lec:"Lec. 20",art:"Art. 223 LSC",tema:"Separación de administradores ad nutum",
+    enunciado:"Los socios de OFINTEC SL quieren incluir en estatutos una cláusula que exija mayoría de 3/5 para destituir a los administradores. ¿Es válida?",
+    opciones:["Sí, los estatutos de la SRL pueden elevar libremente la mayoría para destituir administradores.","No, el art. 223 LSC reconoce la separabilidad libre (ad nutum) de los administradores; una cláusula que dificulta la destitución exigiendo mayoría de 3/5 puede considerarse contraria a este principio e ineficaz.","Sí, siempre que la mayoría no supere los 2/3 del capital.","No es posible en ningún caso modificar las mayorías de separación en una SRL."],
+    correcta:1,
+    explicacion:"El art. 223 LSC consagra la separabilidad libre (ad nutum) de los administradores: la junta puede destituirlos en cualquier momento aunque no figure en el orden del día. Una cláusula estatutaria que exige mayoría de 3/5 para destituir dificulta el ejercicio de este derecho y puede ser considerada ineficaz por contravenir el principio de separabilidad."
+  },
+  {
+    bloque:4,
+    lec:"Lec. 20",art:"Art. 249 LSC",tema:"Consejero delegado y contrato",
+    enunciado:"El consejo de administración de una SA quiere delegar todas sus facultades en un consejero delegado y pagarle una retribución fija de 60.000 €. ¿Qué requisitos exige la LSC?",
+    opciones:["Basta con el acuerdo mayoritario del consejo; no se requiere ningún documento adicional.","El art. 249 LSC exige que la delegación de facultades ejecutivas y la retribución del consejero delegado consten en un contrato entre éste y la sociedad, aprobado previamente por el consejo con el voto favorable de 2/3 de sus miembros, absteniéndose el afectado.","El contrato debe ser aprobado por la junta general con mayoría reforzada.","No es posible delegar todas las facultades del consejo en un solo consejero."],
+    correcta:1,
+    explicacion:"El art. 249 LSC establece que cuando el consejo de administración delegue facultades ejecutivas en un consejero delegado, deberá celebrarse un contrato entre éste y la sociedad que precise todos los conceptos retributivos. El contrato debe ser aprobado por el consejo con el voto favorable de 2/3 de sus miembros, absteniéndose el consejero delegado afectado."
+  },
+  /* ---- BLOQUE 5: Modificación de estatutos y capital ---- */
+  {
+    bloque:5,
+    lec:"Lec. 22",art:"Arts. 285 y 201 LSC",tema:"Competencia exclusiva de la JG",
+    enunciado:"El consejo de administración de una SA quiere cambiar el domicilio de Madrid a Barcelona por acuerdo propio. Los estatutos no dicen nada. ¿Es válido?",
+    opciones:["No, la modificación de estatutos es competencia exclusiva de la junta general (art. 285.1 LSC) salvo excepciones tasadas; sin habilitación estatutaria el consejo no puede acordar el cambio de domicilio.","Sí, el consejo puede cambiar el domicilio social libremente porque es un acto de gestión ordinaria.","Sí, el cambio de domicilio dentro del territorio nacional siempre corresponde al consejo sin necesidad de junta.","No, se necesita además la autorización previa de los acreedores."],
+    correcta:0,
+    explicacion:"La modificación de estatutos es competencia exclusiva de la junta general (art. 285.1 LSC). La excepción del art. 285.2 LSC permite al órgano de administración cambiar el domicilio dentro del territorio nacional solo si los estatutos lo autorizan expresamente. Como los estatutos guardan silencio, se requiere acuerdo de junta con quórum reforzado (art. 194 LSC) y mayoría especial (art. 201 LSC)."
+  },
+  {
+    bloque:5,
+    lec:"Lec. 22",art:"Art. 308 LSC",tema:"Exclusión del derecho de preferencia",
+    enunciado:"La junta de una SA acuerda una ampliación de capital con exclusión del derecho de suscripción preferente de los accionistas existentes. ¿Qué requisitos deben cumplirse?",
+    opciones:["Basta con el acuerdo mayoritario de la junta sin ningún requisito adicional.","El art. 308 LSC exige que la exclusión del derecho de preferencia esté justificada por el interés social, vaya acompañada de un informe de los administradores y, en la SA, también de un informe de experto independiente, y que el precio de emisión coincida con el valor razonable.","Solo se requiere el informe de los administradores, sin necesidad de experto independiente.","El derecho de preferencia no puede excluirse nunca en las SA."],
+    correcta:1,
+    explicacion:"El art. 308 LSC exige para la exclusión del derecho de suscripción preferente: (1) que el interés social lo justifique, (2) informe de administradores que explique las razones, (3) en la SA también informe de experto independiente sobre el valor razonable de las acciones, y (4) que el precio de emisión coincida con el valor razonable. El acuerdo debe adoptarse con los quórum y mayorías de modificación de estatutos."
+  },
+  {
+    bloque:5,
+    lec:"Lec. 22",art:"Art. 346 LSC",tema:"Derecho de separación por cambio de objeto social",
+    enunciado:"Una SRL aprueba en junta la sustitución de su objeto social (antes fabricación de muebles; ahora servicios de consultoría). Un socio que no votó a favor quiere abandonar la sociedad. ¿Tiene derecho?",
+    opciones:["No, el derecho de separación no existe en las SRL.","Sí, el art. 346 LSC reconoce el derecho de separación al socio que no haya votado a favor de determinados acuerdos, entre ellos la sustitución del objeto social.","Solo si el socio tiene más del 10% del capital social.","Solo si el cambio de objeto social se acuerda en junta extraordinaria, no en junta ordinaria."],
+    correcta:1,
+    explicacion:"El art. 346 LSC reconoce el derecho de separación a los socios que no hayan votado a favor (o que carezcan de derecho de voto) cuando la junta apruebe la sustitución o modificación sustancial del objeto social, la prórroga de la sociedad, la reactivación de la sociedad, la creación, modificación o extinción anticipada de la obligación de realizar prestaciones accesorias, y otras causas legales o estatutarias."
+  },
+  {
+    bloque:5,
+    lec:"Lec. 22",art:"Art. 291-292 LSC",tema:"Modificación que impone nuevas obligaciones al socio",
+    enunciado:"La junta de una SRL quiere modificar los estatutos para imponer a todos los socios la obligación de realizar aportaciones adicionales al capital en caso de pérdidas. Un socio se opone. ¿Puede aprobarse la modificación contra su voluntad?",
+    opciones:["Sí, basta con la mayoría reforzada de la junta para imponer nuevas obligaciones a los socios.","No, el art. 291 LSC exige el consentimiento individual de los socios afectados para imponer nuevas obligaciones o cargas directamente ligadas a la condición de socio que vayan más allá de la obligación de aportación.","Sí, si los estatutos ya prevén la posibilidad de exigir aportaciones adicionales.","No, pero el socio disconforme solo puede exigir la devolución de su aportación."],
+    correcta:1,
+    explicacion:"El art. 291 LSC exige el consentimiento individual de los socios afectados para que un acuerdo de modificación de estatutos pueda imponerles nuevas obligaciones. Las obligaciones de los socios son parte nuclear de su posición jurídica y no pueden agravarse por mayoría sin su consentimiento individual."
+  },
+  /* ---- BLOQUE 6: Disolución, liquidación y modificaciones estructurales ---- */
+  {
+    bloque:6,
+    lec:"Lec. 24",art:"Art. 363.1 e) LSC",tema:"Causa de disolución por pérdidas",
+    enunciado:"Una SA tiene capital social de 200.000 €, reservas de 30.000 € y pérdidas acumuladas de 130.000 €. Su patrimonio neto es por tanto de 100.000 €. ¿Incurre en causa de disolución?",
+    opciones:["No, porque el patrimonio neto (100.000 €) sigue siendo positivo.","Sí, el art. 363.1.e) LSC establece como causa de disolución que las pérdidas dejen reducido el patrimonio neto a una cantidad inferior a la mitad del capital social. Aquí el PN (100.000 €) es exactamente la mitad del capital (200.000 €), por lo que no se supera el umbral todavía.","No, el umbral para la causa de disolución por pérdidas es que el PN sea inferior a un tercio del capital social.","Sí, porque las pérdidas acumuladas superan el 50% del capital social."],
+    correcta:1,
+    explicacion:"El art. 363.1.e) LSC establece como causa de disolución que las pérdidas dejen reducido el patrimonio neto a una cantidad inferior a la mitad del capital social. En este caso PN = 100.000 € y mitad del capital = 100.000 €. Como el PN es igual (no inferior) a la mitad del capital, técnicamente no se ha alcanzado aún la causa de disolución, pero está en el límite exacto. Si las pérdidas aumentasen mínimamente, se produciría la causa."
+  },
+  {
+    bloque:6,
+    lec:"Lec. 24",art:"Art. 360 LSC",tema:"Disolución de pleno derecho",
+    enunciado:"Los estatutos de una SA fijaban su duración en 20 años, plazo que acaba de transcurrir. La junta no ha adoptado ningún acuerdo de prórroga ni de reactivación. ¿Qué ocurre?",
+    opciones:["La sociedad continúa operando normalmente hasta que los socios acuerden su disolución voluntaria.","La sociedad se disuelve de pleno derecho (ipso iure) por el transcurso del término de duración fijado en los estatutos (art. 360 LSC), sin necesidad de acuerdo social adicional, abriéndose la fase de liquidación.","Los administradores pueden prorrogar tácitamente la duración continuando con la gestión ordinaria.","La sociedad se transforma automáticamente en una SRL."],
+    correcta:1,
+    explicacion:"El art. 360 LSC establece que la sociedad se disuelve de pleno derecho (sin necesidad de acuerdo social) por el transcurso del término de duración fijado en los estatutos. La disolución opera automáticamente, abriéndose la fase de liquidación. Para evitarla, los socios deben haber acordado la prórroga antes del vencimiento del término."
+  },
+  {
+    bloque:6,
+    lec:"Lec. 24",art:"Art. 370 LSC",tema:"Reactivación de la sociedad disuelta",
+    enunciado:"Una SRL está disuelta por pérdidas que reducen el patrimonio neto por debajo de la mitad del capital. Los socios quieren reactivarla tras sanear la situación. ¿Qué requisitos deben cumplirse?",
+    opciones:["Basta con la mayoría simple de la junta para reactivar la sociedad.","El art. 370 LSC exige: acuerdo de la junta con el quórum y mayorías de modificación de estatutos, que la causa de disolución haya desaparecido, que no haya comenzado el pago de la cuota de liquidación y que el patrimonio contable no sea inferior al capital social.","La reactivación requiere unanimidad de todos los socios en todo caso.","No es posible reactivar una sociedad una vez disuelta."],
+    correcta:1,
+    explicacion:"El art. 370 LSC permite la reactivación de la sociedad disuelta siempre que: (1) la junta la acuerde con el quórum y mayorías de modificación de estatutos, (2) la causa de disolución haya desaparecido, (3) no haya comenzado el pago de la cuota de liquidación a los socios, y (4) el patrimonio contable no sea inferior al capital social. Además, se protege a socios disidentes y acreedores (art. 370.3 y 4 LSC)."
+  },
+  {
+    bloque:6,
+    lec:"Lec. 25",art:"RDL 5/2023",tema:"Fusión: concepto y elementos",
+    enunciado:"ALFA SA y BETA SRL quieren fusionarse de forma que ALFA absorba a BETA, que se extingue. Los socios de BETA recibirán acciones de ALFA. ¿Cuáles son los elementos caracterizadores de esta fusión?",
+    opciones:["La fusión implica la cesión parcial del patrimonio de BETA a ALFA manteniendo ambas su personalidad jurídica.","La fusión por absorción implica: extinción de BETA (sociedad absorbida), transmisión en bloque de todo su patrimonio a ALFA (sucesión universal) y conversión de los socios de BETA en socios de ALFA mediante el canje de acciones (arts. 4 y ss. RDL 5/2023).","BETA se disuelve previamente y luego ALFA adquiere sus activos uno a uno en subasta.","La fusión requiere que ambas sociedades sean del mismo tipo (SA o SRL)."],
+    correcta:1,
+    explicacion:"El RDL 5/2023 regula las modificaciones estructurales. La fusión por absorción se caracteriza por: (1) extinción de la sociedad absorbida sin liquidación, (2) transmisión en bloque de todo su patrimonio a la absorbente mediante sucesión universal, y (3) integración de los socios de la absorbida en la absorbente mediante el canje de sus participaciones/acciones conforme a la relación de canje fijada en el proyecto de fusión."
+  },
+  {
+    bloque:6,
+    lec:"Lec. 25",art:"Arts. 63-71 RDL 5/2023",tema:"Escisión: modalidades",
+    enunciado:"GAMMA SA quiere dividirse en dos: transmite todo su patrimonio a DELTA SA y EPSILON SA (sociedades de nueva creación), disolviéndose sin liquidación, y sus socios pasan a ser socios de ambas beneficiarias. ¿Qué modalidad de escisión es esta?",
+    opciones:["Escisión parcial: GAMMA transmite solo una parte de su patrimonio.","Escisión total o propia: GAMMA transmite la totalidad de su patrimonio a dos o más sociedades beneficiarias, extinguiéndose GAMMA y convirtiéndose sus socios en socios de las beneficiarias (art. 63 RDL 5/2023).","Segregación: GAMMA transmite parte de su patrimonio a las beneficiarias, recibiendo a cambio participaciones de estas.","Fusión inversa: las beneficiarias absorben a GAMMA."],
+    correcta:1,
+    explicacion:"La escisión total o propia se caracteriza por la transmisión de la totalidad del patrimonio de la sociedad escindida a dos o más sociedades beneficiarias (que pueden ser de nueva creación o preexistentes), la extinción de la sociedad escindida sin liquidación y la conversión de sus socios en socios de las sociedades beneficiarias con la proporción que corresponda."
+  },
+  {
+    bloque:6,
+    lec:"Lec. 25",art:"Art. 2 RDL 5/2023",tema:"Transformación: continuidad de personalidad",
+    enunciado:"Los socios de DELTA SRL quieren transformarla en SA para poder cotizar en bolsa en el futuro. ¿Qué ocurre con las deudas y contratos que tenía la SRL?",
+    opciones:["La transformación implica la liquidación de la SRL y la constitución de una nueva SA, por lo que los contratos deben renegociarse.","La transformación no implica liquidación ni transferencia patrimonial: la sociedad mantiene su personalidad jurídica, por lo que las deudas, contratos y relaciones jurídicas continúan sin alteración (continuidad de la personalidad jurídica, art. 2 RDL 5/2023).","Los acreedores de la SRL pueden oponerse a la transformación y exigir el pago anticipado de sus créditos.","La transformación requiere el consentimiento individual de cada acreedor."],
+    correcta:1,
+    explicacion:"La transformación es una modificación estructural que permite a una sociedad cambiar de tipo social sin liquidación ni transferencia patrimonial. La personalidad jurídica de la sociedad continúa íntegra: las deudas, contratos, derechos y obligaciones subsisten sin modificación. Solo cambia la forma jurídica, adaptándose la sociedad a las normas del nuevo tipo (art. 2 RDL 5/2023)."
+  }
+];
+
+/* =================== DEFINICIÓN DE BLOQUES =================== */
+const BLOQUES = [
+  {id:0, nombre:"Soc. personalistas", lec:"Lecs. 14-15"},
+  {id:1, nombre:"Fundación y capital", lec:"Lec. 17"},
+  {id:2, nombre:"Acciones y derechos", lec:"Lec. 18"},
+  {id:3, nombre:"Junta General", lec:"Lec. 19"},
+  {id:4, nombre:"Órgano de Admin.", lec:"Lec. 20"},
+  {id:5, nombre:"Modificac. estatutos", lec:"Lec. 22"},
+  {id:6, nombre:"Disolución y Mod. estructurales", lec:"Lecs. 24-25"}
+];
+
+/* =================== ESTADO =================== */
+let seleccionados = new Set([0,1,2,3,4,5,6]);
+let colaMezcla = [];
+let actual = 0, aciertos = 0, respondidas = 0, historial = [];
+let respondida = false;
+const LETRAS = ['A','B','C','D'];
+
+/* =================== INICIO =================== */
+function renderBloques(){
+  const g = document.getElementById('bloques-grid');
+  g.innerHTML = '';
+  BLOQUES.forEach(b => {
+    const cnt = PREGUNTAS.filter(p => p.bloque === b.id).length;
+    const d = document.createElement('div');
+    d.className = 'bloque-card' + (seleccionados.has(b.id) ? ' activo' : '');
+    d.innerHTML = `<div class="bloque-num">${b.lec}</div><div class="bloque-titulo">${b.nombre}</div><div class="bloque-count">${cnt} preguntas</div>`;
+    d.onclick = () => toggleBloque(b.id, d);
+    g.appendChild(d);
+  });
+  actualizarInfo();
+}
+function toggleBloque(id, el){
+  if(seleccionados.has(id)){if(seleccionados.size>1)seleccionados.delete(id);}
+  else seleccionados.add(id);
+  el.classList.toggle('activo', seleccionados.has(id));
+  actualizarInfo();
+}
+function seleccionarTodos(){
+  BLOQUES.forEach(b => seleccionados.add(b.id));
+  renderBloques();
+}
+function actualizarInfo(){
+  const total = PREGUNTAS.filter(p => seleccionados.has(p.bloque)).length;
+  const nb = seleccionados.size;
+  document.getElementById('sel-info').innerHTML = `<strong>${nb} bloque${nb>1?'s':''} seleccionado${nb>1?'s':''}</strong> · ${total} preguntas`;
+}
+renderBloques();
+
+/* =================== INICIAR TEST =================== */
+function iniciarTest(aleatorio){
+  let pool = PREGUNTAS.filter(p => seleccionados.has(p.bloque));
+  if(aleatorio) pool = pool.sort(() => Math.random()-.5);
+  colaMezcla = pool;
+  actual = 0; aciertos = 0; respondidas = 0; historial = []; respondida = false;
+  document.getElementById('inicio').style.display = 'none';
+  document.getElementById('resultado-wrap').style.display = 'none';
+  document.getElementById('quiz-wrap').style.display = 'block';
+  renderPregunta();
+}
+function volverInicio(){
+  document.getElementById('quiz-wrap').style.display = 'none';
+  document.getElementById('resultado-wrap').style.display = 'none';
+  document.getElementById('inicio').style.display = 'block';
+}
+function repetirTest(){
+  document.getElementById('resultado-wrap').style.display = 'none';
+  actual = 0; aciertos = 0; respondidas = 0; historial = []; respondida = false;
+  document.getElementById('quiz-wrap').style.display = 'block';
+  renderPregunta();
+}
+
+/* =================== RENDERIZAR PREGUNTA =================== */
+function renderPregunta(){
+  const p = colaMezcla[actual];
+  respondida = false;
+  const tot = colaMezcla.length;
+  const pct = Math.round((actual/tot)*100);
+  document.getElementById('prog-fill').style.width = pct+'%';
+  document.getElementById('prog-label').textContent = 'Pregunta '+(actual+1)+' de '+tot;
+  document.getElementById('prog-pct').textContent = pct+'%';
+  document.getElementById('pnum').textContent = 'PREGUNTA '+(actual+1);
+  document.getElementById('meta-row').innerHTML =
+    `<span class="chip chip-tema">${BLOQUES[p.bloque].nombre}</span>` +
+    `<span class="chip chip-art">§ ${p.art}</span>` +
+    `<span class="chip chip-lec">${p.lec}</span>`;
+  document.getElementById('enunciado').textContent = p.enunciado;
+  const cont = document.getElementById('opciones');
+  cont.innerHTML = '';
+  p.opciones.forEach((op,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'opcion-btn';
+    btn.innerHTML = `<span class="letra">${LETRAS[i]}</span><span>${op}</span>`;
+    btn.onclick = () => seleccionar(i);
+    cont.appendChild(btn);
+  });
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '';
+  const bs = document.getElementById('btn-sig');
+  bs.className = 'btn-sig';
+  document.getElementById('score-txt').textContent = 'Aciertos: '+aciertos+' / '+respondidas;
+}
+
+/* =================== SELECCIONAR OPCIÓN =================== */
+function seleccionar(idx){
+  if(respondida) return;
+  respondida = true; respondidas++;
+  const p = colaMezcla[actual];
+  const btns = document.querySelectorAll('.opcion-btn');
+  btns.forEach((b,i)=>{
+    b.disabled = true;
+    if(i===p.correcta) b.classList.add('ok');
+    else if(i===idx) b.classList.add('ko');
+    else b.classList.add('dim');
+  });
+  const esOk = idx===p.correcta;
+  if(esOk) aciertos++;
+  historial.push({pregIdx:actual, ok:esOk});
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback show '+(esOk?'ok':'ko');
+  fb.innerHTML = `<p class="fb-titulo">${esOk?'✓ Correcto':'✗ Incorrecto'}</p><p>${p.explicacion}</p>`;
+  document.getElementById('score-txt').textContent = 'Aciertos: '+aciertos+' / '+respondidas;
+  document.getElementById('btn-sig').className = 'btn-sig vis';
+}
+
+document.getElementById('btn-sig').onclick = () => {
+  actual++;
+  if(actual >= colaMezcla.length) mostrarResultados();
+  else renderPregunta();
+};
+
+/* =================== RESULTADOS =================== */
+function mostrarResultados(){
+  document.getElementById('quiz-wrap').style.display = 'none';
+  const tot = colaMezcla.length;
+  const pct = Math.round((aciertos/tot)*100);
+  document.getElementById('res-big').textContent = aciertos+'/'+tot;
+  document.getElementById('res-pct').textContent = pct+'% de respuestas correctas';
+  let msg = pct>=80 ? '¡Excelente nivel! Dominas los temas del segundo cuatrimestre de Derecho Mercantil.' :
+            pct>=60 ? 'Buen nivel general. Repasa los artículos de los bloques en los que hayas fallado.' :
+            'Conviene repasar los materiales y lecciones de los bloques con más fallos antes del examen.';
+  document.getElementById('res-msg').textContent = msg;
+
+  // Resumen por bloque
+  const br = document.getElementById('bloques-resumen');
+  br.innerHTML = '';
+  [...seleccionados].sort().forEach(bid => {
+    const pregs = colaMezcla.map((p,i)=>({p,i})).filter(({p})=>p.bloque===bid);
+    if(!pregs.length) return;
+    const bien = pregs.filter(({i}) => historial.find(h=>h.pregIdx===i)?.ok).length;
+    const pctB = Math.round((bien/pregs.length)*100);
+    const cls = pctB>=80?'bien':pctB>=50?'medio':'malo';
+    const d = document.createElement('div');
+    d.className = 'bloque-res';
+    d.innerHTML = `<div class="bloque-res-nombre">${BLOQUES[bid].nombre}</div><div class="bloque-res-score ${cls}">${bien}/${pregs.length}</div>`;
+    br.appendChild(d);
+  });
+
+  // Lista detallada
+  const lista = document.getElementById('res-lista');
+  lista.innerHTML = '';
+  historial.forEach(h => {
+    const p = colaMezcla[h.pregIdx];
+    const d = document.createElement('div');
+    d.className = 'res-item '+(h.ok?'ok':'ko');
+    d.innerHTML = `<span class="res-icon">${h.ok?'✓':'✗'}</span><span class="res-txt"><strong>${p.art} — ${p.tema}</strong><br>${BLOQUES[p.bloque].nombre} · ${p.lec}</span>`;
+    lista.appendChild(d);
+  });
+  document.getElementById('resultado-wrap').style.display = 'block';
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
